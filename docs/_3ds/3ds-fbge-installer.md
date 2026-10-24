@@ -25,14 +25,17 @@ image_length: 16838
 layout: app
 license: agpl-3.0
 license_name: GNU Affero General Public License v3.0
+llm_generation: unknown
+preinstall_message: Don't forget to read the "Help" section upon launching the program
 qr:
   fbge-installer.cia: https://db.universal-team.net/assets/images/qr/fbge-installer-cia.png
-script_message: Don't forget to read the "Help" section upon launching the program
 source: https://github.com/AtexBg/fbge-installer
 stars: 1
 systems:
 - 3DS
 title: 3DS-FBGE Installer
+unique_ids:
+- '0xFB6E0'
 update_notes: '<p dir="auto">The 3ds-fbge program (short for 3ds-FrameBufferGraphicalEnvironnement)
   is a custom desktop/GUI meant to be used with the 3DS running Linux. This app will
   install and setup everything needed for the program to work and will give details
@@ -49,6 +52,5 @@ update_notes: '<p dir="auto">The 3ds-fbge program (short for 3ds-FrameBufferGrap
 updated: '2026-05-01T16:06:09Z'
 version: 0.6.0
 version_title: 0.6.0
-website: https://github.com/AtexBg/3ds-fbge
 ---
 A simple tool which helps to install and use the 3DS-FBGE (3ds-FrameBufferGraphicalEnvironnement) binaries on the 3DS and inclues the needed files from the Linux3DS package. 

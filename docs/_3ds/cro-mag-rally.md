@@ -20,6 +20,7 @@ image_length: 174044
 layout: app
 license: other
 license_name: Other
+llm_generation: unknown
 screenshots:
 - description: Race 1
   url: https://db.universal-team.net/assets/images/screenshots/cro-mag-rally/race-1.png
@@ -30,7 +31,7 @@ screenshots:
 - description: Race 4
   url: https://db.universal-team.net/assets/images/screenshots/cro-mag-rally/race-4.png
 source: https://github.com/carrotcreamsoup/CroMagRally
-stars: 5
+stars: 6
 systems:
 - 3DS
 title: Cro-Mag Rally
@@ -61,7 +62,6 @@ update_notes: '<p>This update brings many improvements over the initial release,
 updated: '2024-07-02T00:21:13Z'
 version: 3ds-v1.1.0
 version_title: Version 1.1.0
-website: https://pangeasoft.net/cromag
 ---
 ## *The wildest racing game since man invented the wheel!*
 

@@ -22,16 +22,17 @@ icon: https://raw.githubusercontent.com/badda71/uae3DS/master/meta/icon.png
 image: https://raw.githubusercontent.com/badda71/uae3DS/master/meta/banner.png
 image_length: 28872
 layout: app
-qr:
-  uae3DS.cia: https://db.universal-team.net/assets/images/qr/uae3ds-cia.png
-script_message: 'You will need a "kick.rom" file in sdmc:/3ds/uae3DS.
+llm_generation: 'no'
+preinstall_message: 'You will need a "kick.rom" file in sdmc:/3ds/uae3DS.
 
 
   It must be called "kick.rom", be a kickstart 1.3 image,
 
   and be the 512KB overdumped version.'
+qr:
+  uae3DS.cia: https://db.universal-team.net/assets/images/qr/uae3ds-cia.png
 source: https://github.com/badda71/uae3DS
-stars: 48
+stars: 47
 systems:
 - 3DS
 title: uae3DS

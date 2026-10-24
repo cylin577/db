@@ -11,27 +11,41 @@ description: Bandai WonderSwan (Color/Crystal) & Benesse PocketChallenge V2 emul
 download_page: https://github.com/FluBBaOfWard/NitroSwan/releases
 downloads:
   NitroSwan.zip:
-    size: 185776
-    size_str: 181 KiB
-    url: https://github.com/FluBBaOfWard/NitroSwan/releases/download/v0.7.6/NitroSwan.zip
+    size: 154596
+    size_str: 150 KiB
+    url: https://github.com/FluBBaOfWard/NitroSwan/releases/download/v0.7.7/NitroSwan.zip
 github: FluBBaOfWard/NitroSwan
 icon: https://db.universal-team.net/assets/images/icons/nitroswan.png
 image: https://raw.githubusercontent.com/FluBBaOfWard/NitroSwan/main/logo.png
 image_length: 38554
 layout: app
+llm_generation: unknown
 source: https://github.com/FluBBaOfWard/NitroSwan
-stars: 67
+stars: 76
 systems:
 - DS
 title: NitroSwan
-update_notes: '<ul dir="auto">
+update_notes: '<p dir="auto">Not much new in this release, changed from devkitARM
+  to BlocksDS and found a couple of small bugs.</p>
 
-  <li>Fixed register 0x14 initialisation in built-in BIOS.</li>
+  <ul dir="auto">
 
-  <li>Optimised sound mixer a tiny bit.</li>
+  <li>Fixed sound button behaviour on HW.</li>
+
+  <li>Ported from devkitARM to BlocksDS, smaller binary.</li>
 
   </ul>'
-updated: '2026-01-18T19:35:40Z'
-version: v0.7.6
-version_title: V0.7.6
+updated: '2026-08-12T15:02:55Z'
+version: v0.7.7
+version_title: NitroSwan V0.7.7
 ---
+### Installation instructions
+
+<div class="alert alert-info">These installation instructions have been automatically generated based on Universal-Updater's installation scripts</div>
+<details class="alert alert-secondary"><summary>NitroSwan.nds</summary>
+<ol>
+<li>Download <code>NitroSwan.zip</code></li>
+<li>Extract <code>/NitroSwan.nds</code> from the zip to where you keep NDS files on your SD card</li>
+</ol>
+</details>
+

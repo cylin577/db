@@ -2,7 +2,7 @@
 author: Oldhimaster1
 avatar: https://avatars.githubusercontent.com/u/179153474?v=4
 categories:
-- utility
+- app
 color: '#5a635b'
 color_bg: '#5a635b'
 created: '2026-04-03T20:43:47Z'
@@ -22,8 +22,9 @@ image_length: 42667
 layout: app
 license: mit
 license_name: MIT License
+llm_generation: unknown
 source: https://github.com/Oldhimaster1/3ds-Google-Maps
-stars: 4
+stars: 8
 systems:
 - 3DS
 title: 3ds Google Maps

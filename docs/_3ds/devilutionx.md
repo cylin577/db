@@ -25,9 +25,8 @@ image_length: 37280
 layout: app
 license: other
 license_name: Other
-qr:
-  devilutionx-3ds.cia: https://db.universal-team.net/assets/images/qr/devilutionx-3ds-cia.png
-script_message: 'You need the game files from your CD/GOG in
+llm_generation: unknown
+preinstall_message: 'You need the game files from your CD/GOG in
 
   "sdmc:/3ds/devilutionx/" to play the game.
 
@@ -41,8 +40,10 @@ script_message: 'You need the game files from your CD/GOG in
 
 
   Diablo Spawn (shareware): "spawn.mpq"'
+qr:
+  devilutionx-3ds.cia: https://db.universal-team.net/assets/images/qr/devilutionx-3ds-cia.png
 source: https://github.com/diasurgical/DevilutionX
-stars: 9492
+stars: 9930
 systems:
 - 3DS
 title: DevilutionX

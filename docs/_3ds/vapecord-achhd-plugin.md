@@ -20,6 +20,7 @@ image_length: 12131
 layout: app
 license: mit
 license_name: MIT License
+llm_generation: 'no'
 source: https://github.com/RedShyGuy/Vapecord-ACHHD-Plugin
 stars: 16
 systems:
@@ -67,3 +68,14 @@ updated: '2021-04-13T21:58:23Z'
 version: v.1.1.0
 version_title: ACHHD Vapecord Public Plugin [v.1.1.0]
 ---
+### Installation instructions
+
+<div class="alert alert-info">These installation instructions have been automatically generated based on Universal-Updater's installation scripts</div>
+<details class="alert alert-secondary"><summary>Plugin (All Regions)</summary>
+<ol>
+<li>Download <code>Vapecord-ACHHD.zip</code></li>
+<li>Extract <code>/luma/plugins</code> from the zip to <code>/luma/plugins</code> on your SD card</li>
+<li>Extract <code>/VapecordACHHD</code> from the zip to <code>/VapecordACHHD</code> on your SD card</li>
+</ol>
+</details>
+

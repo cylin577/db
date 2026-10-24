@@ -28,6 +28,7 @@ image_length: 9935
 layout: app
 license: gpl-3.0
 license_name: GNU General Public License v3.0
+llm_generation: 'no'
 qr:
   PKCount.cia: https://db.universal-team.net/assets/images/qr/pkcount-cia.png
   PKCount.nds: https://db.universal-team.net/assets/images/qr/pkcount-nds.png
@@ -43,7 +44,7 @@ screenshots:
 - description: The credits
   url: https://db.universal-team.net/assets/images/screenshots/pkcount/the-credits.png
 source: https://github.com/SuperSaiyajinStackZ/PKCount
-stars: 6
+stars: 7
 systems:
 - DS
 - 3DS

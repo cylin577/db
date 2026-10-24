@@ -19,6 +19,7 @@ import qrcode
 import requests
 import yaml
 from bs4 import BeautifulSoup
+from datetime import timezone
 from dateutil import parser
 from markdownify import markdownify
 from PIL import Image, ImageDraw, ImageFile
@@ -28,7 +29,7 @@ from requests.utils import requote_uri
 from img2tdx import img2tdx
 from unistore import StoreEntry, UniStore, ICONS_PER_SHEET
 from utils import (format_to_web_name, format_traceback, get_matching_app,
-                   to_friendly_bytes, was_recently_updated)
+                   to_friendly_bytes, was_recently_updated, create_installation_instructions)
 
 DOWNLOAD_BLACKLIST = r"(\.3ds$|\.apk|\.appimage|\.flatpak|\.dmg|\.dol|\.exe|\.ipa|\.love|\.nro|\.opk|\.pkg|\.smdh|\.vpk|\.xz|armhf|elf|linux|macos|osx|PS3|PSP|switch|ubuntu|vita|wii|win|x86_64|xbox)"
 DOCS_DIR: Optional[pathlib.Path] = None
@@ -36,6 +37,18 @@ PRIORITY_MODE = True
 SCRIPT_DIR = pathlib.Path(__file__).parent.resolve()
 TEMP_DIR = SCRIPT_DIR / "temp"
 BG_IMAGE = None
+
+
+def tid_check(unique_id: int) -> str | None:
+	"""Checks whether a unique ID conflicts with a retail game"""
+	with open(SCRIPT_DIR / "title-ids.json") as fp:
+		title_ids = json.load(fp)
+
+		id_str = f"{unique_id:05X}"
+		if id_str in title_ids:
+			return title_ids[id_str]
+
+	return None
 
 
 def saveIcon(img: Image.Image, index: int, ds: bool,
@@ -129,6 +142,7 @@ def retroarchUniStore() -> None:
 			info["authors"].replace("|", ", ") if "authors" in info else "libretro",
 			shorten(info["description"], 200, placeholder="...") if "description" in info else "",
 			info["display_version"] if "display_version" in info else "nightly",
+			"nightly",
 			categories=info["categories"].split("|") if "categories" in info else ["emulator"],
 			consoles=["3DS"],
 			releaseNotes=notes,
@@ -234,12 +248,11 @@ def handle_github_app(github: GitHubAPI, app: Dict[str, Any]):
 			# check for usable assets
 			for asset in r["assets"]:
 				if (len(re.findall(app["download_filter"], asset["name"])) > 0 if "download_filter" in app else len(re.findall(DOWNLOAD_BLACKLIST, asset["name"])) == 0):
+					release = r
 					break
-					# didn't break (find a usable asset)? skip this release.
-				else:
-					continue
-			release = r
-			break
+
+			if release:
+				break
 
 	# If no actual release found on page 1, try /latest
 	if not release:
@@ -266,7 +279,7 @@ def handle_github_app(github: GitHubAPI, app: Dict[str, Any]):
 	if "created" not in app:
 		app["created"] = api["created_at"]
 
-	if "website" not in app and api["homepage"] != "" and api["homepage"] is not None:
+	if "website" not in app and api["homepage"] and api["homepage"].startswith("https://db.universal-team.net"):
 		app["website"] = api["homepage"]
 
 	if "wiki" not in app and api["has_wiki"]:
@@ -367,57 +380,11 @@ def handle_github_app(github: GitHubAPI, app: Dict[str, Any]):
 	return app
 
 
-def handle_bitbucket_app(app: Dict[str, Any]):
-	api = requests.get(f"https://api.bitbucket.org/2.0/repositories/{app['bitbucket']['repo']}").json()
-
-	if "title" not in app:
-		app["title"] = api["name"]
-
-	if "author" not in app:
-		app["author"] = api["owner"]["display_name"]
-
-	if "description" not in app:
-		app["description"] = api["description"].replace("\r\n", "\n")
-
-	if "avatar" not in app:
-		app["avatar"] = api["links"]["avatar"]["href"]
-
-	if "source" not in app:
-		app["source"] = api["links"]["html"]["href"]
-
-	if "created" not in app:
-		app["created"] = api["created_on"]
-
-	if "files" in app["bitbucket"]:
-		if "downloads" not in app:
-			app["downloads"] = {}
-		for download in app["bitbucket"]["files"]:
-			fileAPI = requests.get(f"https://api.bitbucket.org/2.0/repositories/{app['bitbucket']['repo']}/src/{(app['bitbucket']['branch'] if 'branch' in app['bitbucket'] else 'master')}/{download.replace(' ', '%20')}?format=meta").json()
-			if download not in app["downloads"]:
-				app["downloads"][download[download.rfind("/") + 1:]] = {
-					"url": fileAPI["links"]["self"]["href"],
-					"size": fileAPI["size"],
-					"size_str": to_friendly_bytes(fileAPI["size"])
-				}
-
-			if "download_page" not in app:
-				app["download_page"] = f"https://bitbucket.org/{app['bitbucket']['repo']}/src/{(app['bitbucket']['branch'] if 'branch' in app['bitbucket'] else 'master')}/{download}"
-
-			if "version" not in app:
-				app["version"] = fileAPI["commit"]["hash"][:7]
-
-			if "updated" not in app:
-				commit = requests.get(fileAPI["commit"]["links"]["self"]["href"]).json()
-				app["updated"] = commit["date"]
-	
-	return app
-
-
-def handle_gitlab_app(app: Dict[str, Any]):
+def handle_gitlab_app(github: GitHubAPI, app: Dict[str, Any]):
 	gitlab_id = app["gitlab"].replace('/', '%2F')
-	endpoint = app.get("gitlab_endpoint", "https://gitlab.com")
-	repo = requests.get(f"{endpoint}/api/v4/projects/{gitlab_id}").json()
-	releases = requests.get(f"{endpoint}/api/v4/projects/{gitlab_id}/releases?include_html_description=true").json()
+	host = "https://" + app.get("gitlab_host", "gitlab.com")
+	repo = requests.get(f"{host}/api/v4/projects/{gitlab_id}?license=true").json()
+	releases = requests.get(f"{host}/api/v4/projects/{gitlab_id}/releases?include_html_description=true").json()
 	release = releases[0]
 	if "title" not in app:
 		app["title"] = repo["name"]
@@ -425,17 +392,25 @@ def handle_gitlab_app(app: Dict[str, Any]):
 		app["author"] = repo["namespace"]["name"]
 	if "description" not in app:
 		app["description"] = repo["description"]
-	if "avatar" not in app:
-		app["avatar"] = repo["avatar_url"]
+	if "icon" not in app and repo["avatar_url"]:
+		app["icon"] = repo["avatar_url"]
+	if "avatar" not in app and repo["namespace"]["avatar_url"]:
+		app["avatar"] = host + "/" + repo["namespace"]["avatar_url"]
 	if "source" not in app:
 		app["source"] = repo["web_url"]
 	if "created" not in app:
 		app["created"] = repo["created_at"]
+	if repo["license"]:
+		if "license" not in app:
+			app["license"] = repo["license"]["key"]
+		if "license_name" not in app:
+			app["license_name"] = repo["license"]["name"]
 	app["stars"] += repo["star_count"]
+
 
 	if release:
 		if "download_page" not in app:
-			app["download_page"] = f"{endpoint}/{app['gitlab']}/-/releases"
+			app["download_page"] = f"{host}/{app['gitlab']}/-/releases"
 
 		if "version" not in app:
 			app["version"] = release["tag_name"]
@@ -448,7 +423,7 @@ def handle_gitlab_app(app: Dict[str, Any]):
 			if "description_html" in release:
 				app["update_notes"] = release["description_html"].replace("\r\n", "\n")
 			else:
-				app["update_notes"] = release["description"].replace("\r\n", "\n")
+				app["update_notes"] = github.format_markdown(release["description"], mode="markdown")
 
 		if "updated" not in app:
 			app["updated"] = release["released_at"]
@@ -464,20 +439,178 @@ def handle_gitlab_app(app: Dict[str, Any]):
 	return app
 
 
+def handle_forgejo_app(github: GitHubAPI, app: Dict[str, Any]):
+	host = "https://" + app["forgejo_host"]
+	repo = requests.get(f"{host}/api/v1/repos/{app['forgejo']}").json()
+	releases = requests.get(f"{host}/api/v1/repos/{app['forgejo']}/releases").json()
+
+	release = None
+	prerelease = None
+	if len(releases) > 0 and releases[0]["prerelease"]:
+		prerelease = releases[0]
+	for r in releases:
+		if not (r["prerelease"] or r["draft"]):
+			# check for usable assets
+			for asset in r["assets"]:
+				if (len(re.findall(app["download_filter"], asset["name"])) > 0 if "download_filter" in app else len(re.findall(DOWNLOAD_BLACKLIST, asset["name"])) == 0):
+					release = r
+					break
+
+			if release:
+				break
+
+	# If no actual release found on page 1, try /latest
+	if not release:
+		release = requests.get(f"{host}/api/v1/repos/{app['forgejo']}/releases/latest").json()
+		if "message" in release and release["message"] == "not found":
+			release = None
+
+	if "title" not in app:
+		app["title"] = repo["name"]
+
+	if "author" not in app:
+		app["author"] = repo["owner"]["full_name"] or repo["owner"]["login"]
+
+	if "description" not in app and repo["description"] != "" and repo["description"] is not None:
+		app["description"] = repo["description"]
+
+	if "icon" not in app and repo["avatar_url"]:
+		app["icon"] = repo["avatar_url"]
+
+	if "avatar" not in app and repo["owner"]["avatar_url"]:
+		app["avatar"] = repo["owner"]["avatar_url"]
+
+	if "source" not in app:
+		app["source"] = repo["html_url"]
+
+	if "created" not in app:
+		app["created"] = parser.parse(repo["created_at"]).astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+	if "website" not in app and repo["website"] and not repo["website"].startswith("https://db.universal-team.net"):
+		app["website"] = repo["website"]
+
+	if "wiki" not in app and repo["has_wiki"] and repo["has_wiki_contents"]:
+		app["wiki"] = f"{repo['html_url']}/wiki"
+
+	# accumulate incase other apis
+	app["stars"] += repo["stars_count"]
+
+	if release:
+		if "download_page" not in app:
+			app["download_page"] = f"{host}/{app['forgejo']}/releases"
+
+		if "version" not in app:
+			app["version"] = release["tag_name"]
+
+		if "version_title" not in app and release["name"]:
+			app["version_title"] = release["name"]
+
+		if "update_notes" not in app and release["body"] != "" and release["body"] is not None:
+			app["update_notes_md"] = release["body"].replace("\r\n", "\n")
+			app["update_notes"] = github.format_markdown(release["body"], mode="markdown")
+
+		if "updated" not in app:
+			app["updated"] = parser.parse(release["published_at"]).astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+		if "downloads" not in app:
+			app["downloads"] = {}
+		for asset in release["assets"]:
+			if not asset["name"] in app["downloads"] and (len(re.findall(app["download_filter"], asset["name"])) > 0 if "download_filter" in app else len(re.findall(DOWNLOAD_BLACKLIST, asset["name"])) == 0):
+				app["downloads"][asset["name"]] = {
+					"url": asset["browser_download_url"],
+					"size": asset["size"],
+					"size_str": to_friendly_bytes(asset["size"])
+				}
+
+	if prerelease:
+		if "prerelease" not in app:
+			app["prerelease"] = {}
+
+		if "downloads" not in app["prerelease"]:
+			app["prerelease"]["downloads"] = {}
+		for asset in prerelease["assets"]:
+			if not asset["name"] in app["prerelease"]["downloads"] and (len(re.findall(app["download_filter"], asset["name"])) > 0 if "download_filter" in app else len(re.findall(DOWNLOAD_BLACKLIST, asset["name"])) == 0):
+				app["prerelease"]["downloads"][asset["name"]] = {
+					"url": asset["browser_download_url"],
+					"size": asset["size"],
+					"size_str": to_friendly_bytes(asset["size"])
+				}
+
+		if len(app["prerelease"]["downloads"]) > 0:
+			if "download_page" not in app:
+				app["download_page"] = f"{host}/{app['forgejo']}/releases"
+
+			if "download_page" not in app["prerelease"]:
+				app["prerelease"]["download_page"] = prerelease["html_url"]
+
+			if "version_title" not in app and "version" not in app and prerelease["name"]:
+				app["version_title"] = prerelease["name"]
+			if "version_title" not in app["prerelease"] and prerelease["name"]:
+				app["prerelease"]["version_title"] = prerelease["name"]
+
+			if "version" not in app:
+				app["version"] = prerelease["tag_name"]
+			if "version" not in app["prerelease"]:
+				app["prerelease"]["version"] = prerelease["tag_name"]
+
+			if "update_notes" not in app["prerelease"] and prerelease["body"]:
+				app["prerelease"]["update_notes_md"] = prerelease["body"].replace("\r\n", "\n")
+				app["prerelease"]["update_notes"] = github.format_markdown(prerelease["body"], mode="markdown")
+
+				if "update_notes" not in app:
+					app["update_notes_md"] = app["prerelease"]["update_notes_md"]
+					app["update_notes"] = app["prerelease"]["update_notes"]
+
+			if "updated" not in app:
+				app["updated"] = parser.parse(prerelease["published_at"]).astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+			if "updated" not in app["prerelease"]:
+				app["prerelease"]["updated"] = parser.parse(prerelease["published_at"]).astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+			if not "nightly" in app and re.match(r"^[a-zA-Z]+$", app["prerelease"]["version"]):
+				app["nightly"] = app["prerelease"]
+				app.pop("prerelease")
+		else:
+			app.pop("prerelease")
+
+	return app
+
+
 def create_web_file(app: Dict[str, Any]):
 	web = app.copy()
 	web["layout"] = "app"
+
 	# We want unique IDs as hex
 	if "unique_ids" in web:
 		web["unique_ids"] = [f"0x{uid:X}" for uid in web["unique_ids"]]
+
 	# long description is put as the content
+	body = ""
 	if "long_description" in web:
+		body = web["long_description"]
 		web.pop("long_description")
+
+	# Create installation instructions from scripts
+	if "scripts" in web:
+		if "no_instructions" not in app or not app["no_instructions"]:
+			if len(body) > 0:
+				body += "\n\n"
+			body += "### Installation instructions\n\n"
+			body += "<div class=\"alert alert-info\">These installation instructions have been automatically generated based on Universal-Updater's installation scripts</div>\n"
+
+			for key in web["scripts"]:
+				script = web["scripts"][key]
+				if "script" in script:  # Sometimes its an object, ie for prerelease scripts
+					script = script["script"]
+
+				body += f"<details class=\"alert alert-secondary\"><summary>{key}</summary>\n"
+				body += create_installation_instructions(script)
+				body += "\n</details>\n\n"
+
+		web.pop("scripts")
+
 	# Remove large things that aren't needed
 	if "update_notes_md" in web:
 		web.pop("update_notes_md")
-	if "scripts" in web:
-		web.pop("scripts")
 	if "archive" in web:
 		web.pop("archive")
 	if "slug" in web:
@@ -488,6 +621,7 @@ def create_web_file(app: Dict[str, Any]):
 		web.pop("icon_index")
 	if "installed_files" in web:
 		web.pop("installed_files")
+
 	# Add defaults where absolutely needed
 	if "systems" not in web:
 		web["systems"] = ["3DS"]  # default to 3DS
@@ -497,9 +631,8 @@ def create_web_file(app: Dict[str, Any]):
 		if "title" in web:
 			with open(DOCS_DIR.joinpath(f"_{format_to_web_name(sys)}", f"{format_to_web_name(web['title'])}.md"), "w", encoding="utf8") as file:
 				file.write(f"---\n{yaml.dump(web, sort_keys=True, allow_unicode=True)}---\n")
-				if "long_description" in app:
-					file.write(app["long_description"])
-	
+				file.write(body)
+
 	return web
 
 
@@ -546,13 +679,13 @@ def fetch_app_data(app: Dict[str, Any], github_session: GitHubAPI):
 		click.echo(f'GitHub -- {app["github"]}')
 		app = handle_github_app(github_session, app)
 
-	if "bitbucket" in app:
-		click.echo(f'Bitbucket -- {app["bitbucket"]["repo"]}')
-		app = handle_bitbucket_app(app)
-
 	if "gitlab" in app:
 		click.echo(f'GitLab -- {app["gitlab"]}')
-		app = handle_gitlab_app(app)
+		app = handle_gitlab_app(github_session, app)
+
+	if "forgejo" in app:
+		click.echo(f'Forgejo -- {app["forgejo"]}')
+		app = handle_forgejo_app(github_session, app)
 
 	return app
 
@@ -621,6 +754,13 @@ def process_app_entry(app: Dict[str, Any], fp: str, icon_idx: int, github_api: G
 		app["update_notes"] = github_api.format_markdown(app["update_notes_md"],
 												   		 mode="gfm" if "github" in app else "markdown",
 												   		 context=app["github"] if "github" in app else None)
+
+	# Set LLM usage
+	if "llm_generation" not in app:
+		app["llm_generation"] = "unknown"  # null == undisclosed
+
+		if "updated" in app and parser.parse(app["updated"]).year < 2023:
+			app["llm_generation"] = "no"
 
 	# Prematurely stop here, if no DOCS_DIR.
 	# CLI normally checks for DOCS_DIR, if this is the all command
@@ -694,11 +834,6 @@ def process_app_entry(app: Dict[str, Any], fp: str, icon_idx: int, github_api: G
 				img, color = saveIcon(img, iconIndex, True)
 				if "color" not in app:
 					app["color"] = color
-				if "color_bg" not in app:
-					# Darken color to a maximum of 50% brightness
-					hsv = list(rgb_to_hsv(*[int(x, 16) / 255 for x in re.findall("#(..)(..)(..)", color)[0]]))
-					hsv[2] = min(0.5, hsv[2])
-					app["color_bg"] = "#%02x%02x%02x" % (*[round(x * 255) for x in hsv_to_rgb(*hsv)],)
 
 			if "icon" in app and app["icon"].endswith(".bmp"):
 				# This is also duplicated
@@ -718,11 +853,18 @@ def process_app_entry(app: Dict[str, Any], fp: str, icon_idx: int, github_api: G
 
 			iconIndex += 1
 
+
+	# Darken color to a maximum of 50% brightness
+	if "color_bg" not in app and "color" in app:
+		hsv = list(rgb_to_hsv(*[int(x, 16) / 255 for x in re.findall("#(..)(..)(..)", app["color"])[0]]))
+		hsv[2] = min(0.5, hsv[2])
+		app["color_bg"] = "#%02x%02x%02x" % (*[round(x * 255) for x in hsv_to_rgb(*hsv)],)
+
 	# Make QR
 	if "downloads" in app:
 		for item in app["downloads"]:
 			if item.endswith(".cia") or item.endswith(".nds") or item.endswith(".dsi"):
-				qr = qrcode.make(app["downloads"][item]["url"], box_size=5, version=5).convert("RGBA")
+				qr = qrcode.make(app["downloads"][item]["url"], box_size=5, version=6).convert("RGBA")
 				if img:
 					draw = ImageDraw.Draw(qr)
 					draw.rectangle((((qr.width - img.width) // 2 - 5, (qr.height - img.height) // 2 - 10), ((qr.width + img.width) // 2 + 4, (qr.height + img.height) // 2 + 10 if "version" in app else 4)), fill=(255, 255, 255))
@@ -745,7 +887,7 @@ def process_app_entry(app: Dict[str, Any], fp: str, icon_idx: int, github_api: G
 	if "prerelease" in app:
 		for item in app["prerelease"]["downloads"]:
 			if item.endswith(".cia") or item.endswith(".nds") or item.endswith(".dsi"):
-				qr = qrcode.make(app["prerelease"]["downloads"][item]["url"], box_size=5, version=5).convert("RGBA")
+				qr = qrcode.make(app["prerelease"]["downloads"][item]["url"], box_size=5, version=6).convert("RGBA")
 				data = numpy.array(qr)
 				r, g, b, a = data.T
 				black = (r == 0) & (g == 0) & (b == 0)
@@ -770,7 +912,7 @@ def process_app_entry(app: Dict[str, Any], fp: str, icon_idx: int, github_api: G
 	if "nightly" in app:
 		for item in app["nightly"]["downloads"]:
 			if item.endswith(".cia") or item.endswith(".nds") or item.endswith(".dsi"):
-				qr = qrcode.make(app["nightly"]["downloads"][item]["url"], box_size=5, version=5).convert("RGBA")
+				qr = qrcode.make(app["nightly"]["downloads"][item]["url"], box_size=5, version=6).convert("RGBA")
 				data = numpy.array(qr)
 				r, g, b, a = data.T
 				black = (r == 0) & (g == 0) & (b == 0)
@@ -789,7 +931,7 @@ def process_app_entry(app: Dict[str, Any], fp: str, icon_idx: int, github_api: G
 				if "qr" not in app["nightly"]:
 					app["nightly"]["qr"] = {}
 				app["nightly"]["qr"][item] = f"https://db.universal-team.net/assets/images/qr/git/{format_to_web_name(item)}.png"
-	
+
 	return app, iconIndex
 
 
@@ -813,8 +955,8 @@ class GitHubAPI:
 		r = resp.json()
 		# Sometimes a display name is not set so we fallback to login name
 		return r['name'] or r['login']
-	
-	def format_markdown(self, content: str, *, mode: str = "markdown", context: Optional[str]) -> str:
+
+	def format_markdown(self, content: str, *, mode: str = "markdown", context: Optional[str] = None) -> str:
 		data = {"text": content, "mode": mode}
 		if context:
 			data['context'] = context
@@ -832,7 +974,7 @@ def process_from_folder(sourceFolder: pathlib.Path, ghToken: str, webhook_url: s
 	for item in sourceFolder.iterdir():
 		with item.open(encoding="utf8") as f:
 			source.append((str(item), json.load(f)))
-	source.sort(key=lambda x: [x[1][key] for key in ["github", "gitlab", "title"] if key in x[1]][0])
+	source.sort(key=lambda x: [x[1][key] for key in ["github", "gitlab", "forgejo", "title"] if key in x[1]][0])
 
 	# Old data json
 	oldData = None
@@ -898,9 +1040,6 @@ def process_from_folder(sourceFolder: pathlib.Path, ghToken: str, webhook_url: s
 		# Add to output json
 		output.append(app)
 
-		# Create the website file
-		create_web_file(app)
-
 		if "unistore_exclude" not in app or not app["unistore_exclude"]:
 			# Move links to end to be more readable in U-U
 			notes = app["update_notes_md"] if "update_notes_md" in app else ""
@@ -937,11 +1076,12 @@ def process_from_folder(sourceFolder: pathlib.Path, ghToken: str, webhook_url: s
 				[x for x in app["screenshots"] if x["url"].endswith(".png") and "horihd" not in x["url"]] if "screenshots" in app else [],
 				notes,
 				app["license"] if "license" in app else "",
+				app["llm_generation"] if "llm_generation" in app else "",
 				app["wiki"] if "wiki" in app else "",
 				app["icon_index"] if "icon_index" in app else -1,
 				app["color_bg"] if "color_bg" in app else app["color"] if "color" in app else "",
 				app["stars"] if "stars" in app else 0,
-				app["script_message"] if "script_message" in app else "",
+				app["preinstall_message"] if "preinstall_message" in app else "",
 				app["unique_ids"] if "unique_ids" in app else [],
 				app["installed_files"] if "installed_files" in app else []
 			)
@@ -971,6 +1111,11 @@ def process_from_folder(sourceFolder: pathlib.Path, ghToken: str, webhook_url: s
 								sizeStr = to_friendly_bytes(app["downloads"][file]["size"]) if "size" in app["downloads"][file] else None
 								entry.addDownloadScript(item, file, app["downloads"][file]["url"], items[item], sizeStr)
 
+								if "archive" in app:
+									if "scripts" not in app:
+										app["scripts"] = {}
+									app["scripts"][item] = entry._entry[item]
+
 				if "prerelease" in app:
 					for file in app["prerelease"]["downloads"]:
 						items, match = next(((app["archive"][x], re.findall(x, file)) for x in app["archive"] if re.findall(x, file)), (None, None)) if "archive" in app else (None, None)
@@ -984,6 +1129,11 @@ def process_from_folder(sourceFolder: pathlib.Path, ghToken: str, webhook_url: s
 								sizeStr = to_friendly_bytes(app["prerelease"]["downloads"][file]["size"]) if "size" in app["prerelease"]["downloads"][file] else None
 								entry.addDownloadScript(item, file, app["prerelease"]["downloads"][file]["url"], items[item], sizeStr, "prerelease")
 
+								if "archive" in app:
+									if "scripts" not in app:
+										app["scripts"] = {}
+									app["scripts"][f"[prerelease] {item}"] = entry._entry[f"[prerelease] {item}"]
+
 				if "nightly" in app:
 					for file in app["nightly"]["downloads"]:
 						items, match = next(((app["archive"][x], re.findall(x, file)) for x in app["archive"] if re.findall(x, file)), (None, None)) if "archive" in app else (None, None)
@@ -995,7 +1145,12 @@ def process_from_folder(sourceFolder: pathlib.Path, ghToken: str, webhook_url: s
 
 							for item in items:
 								sizeStr = to_friendly_bytes(app["nightly"]["downloads"][file]["size"]) if "size" in app["nightly"]["downloads"][file] else None
-								entry.addDownloadScript(item, file, app["nightly"]["downloads"][file]["url"], items[item], sizeStr, "nightly")
+								entry.addDownloadScript(item, file, app["nightly"]["downloads"][file]["url"], items[item], sizeStr, "git")
+
+								if "archive" in app:
+									if "scripts" not in app:
+										app["scripts"] = {}
+									app["scripts"][f"[git] {item}"] = entry._entry[f"[git] {item}"]
 
 			if app["title"] == "RetroArch":
 				entry._entry["info"]["description"] += "\n\nCores must be downloaded from their separate UniStore, which can be added in settings."
@@ -1003,6 +1158,21 @@ def process_from_folder(sourceFolder: pathlib.Path, ghToken: str, webhook_url: s
 					retroarchUniStore()
 
 			unistore.append(entry)
+		else:
+			# Create Universal-Updater version.json
+			if app["title"] == "Universal-Updater":
+				version = {
+					"release": {
+						"version": app["version"],
+						"notes": app["update_notes_md"]
+					}
+				}
+
+				with open(DOCS_DIR.joinpath("unistore", "version.json"), "w") as f:
+					json.dump(version, f, indent="\t")
+
+		# Create the website file
+		create_web_file(app)
 
 		click.echo("=" * 80)
 
@@ -1046,7 +1216,7 @@ def check_for_docs_dir(path: str) -> pathlib.Path:
 	if not exists:
 		docs_path = click.prompt(text="Unable to find the docs directory, please type a directory in.\nControl-C to cancel this!",
 								 type=click.Path(exists=True, file_okay=False))
-	
+
 	return docs_path
 
 
@@ -1106,7 +1276,7 @@ def gen_retroarch(docs):
 
 @main_entry_group.command()
 @click.argument("apps", type=click.File(mode="r"), nargs=-1)
-@click.option("--github-token", help="A GitHub API token", envvar="TOKEN")
+@click.option("--github-token", "-t", help="A GitHub API token", envvar="TOKEN")
 @click.option("--docs", default=str(SCRIPT_DIR.parent / "docs"), type=click.Path(file_okay=False))
 def app_test(apps: TextIO, github_token: Optional[str], docs: str):
 	"""Tests individual apps if it is fetchable and workable with for UDB"""
@@ -1129,6 +1299,12 @@ def app_test(apps: TextIO, github_token: Optional[str], docs: str):
 			return
 
 		click.echo(json.dumps(entry[0], indent=4))
+
+		if "unique_ids" in content:
+			for unique_id in content["unique_ids"]:
+				conflict = tid_check(unique_id)
+				if conflict:
+					click.secho(f"Warning: Unique ID 0x{unique_id:05X} conflicts with {conflict}!!", fg="red")
 
 if __name__ == "__main__":
 	main_entry_group()

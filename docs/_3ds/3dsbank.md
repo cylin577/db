@@ -19,10 +19,11 @@ image_length: 266
 layout: app
 license: gpl-3.0
 license_name: GNU General Public License v3.0
+llm_generation: 'no'
 qr:
   3DSBank.cia: https://db.universal-team.net/assets/images/qr/3dsbank-cia.png
 source: https://github.com/RocketRobz/3DSBank
-stars: 100
+stars: 104
 systems:
 - 3DS
 title: 3DSBank

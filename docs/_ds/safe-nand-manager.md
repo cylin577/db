@@ -15,14 +15,15 @@ downloads:
     url: https://github.com/DS-Homebrew/SafeNANDManager/releases/download/v1.1.1/SafeNANDManager.nds
 github: DS-Homebrew/SafeNANDManager
 image: https://avatars.githubusercontent.com/u/46971470?v=4&size=128
-image_length: 4456
+image_length: 4509
 layout: app
 license: mit
 license_name: MIT License
+llm_generation: 'no'
 qr:
   SafeNANDManager.nds: https://db.universal-team.net/assets/images/qr/safenandmanager-nds.png
 source: https://github.com/DS-Homebrew/SafeNANDManager
-stars: 51
+stars: 56
 systems:
 - DS
 title: Safe NAND Manager

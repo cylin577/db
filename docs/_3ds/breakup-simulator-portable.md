@@ -1,5 +1,5 @@
 ---
-author: Dangerbites
+author: Anteger
 avatar: https://avatars.githubusercontent.com/u/119724559?v=4
 categories:
 - game
@@ -20,11 +20,12 @@ image_length: 58937
 layout: app
 license: mit
 license_name: MIT License
+llm_generation: unknown
 screenshots:
 - description: Screenshot
   url: https://db.universal-team.net/assets/images/screenshots/breakup-simulator-portable/screenshot.png
 source: https://github.com/Dangerbites/BreakupSimulator3DS
-stars: 4
+stars: 3
 systems:
 - 3DS
 title: Breakup Simulator Portable
@@ -54,3 +55,15 @@ CAT GRILL by DangerBites
 Drawing Cat Grill holds up is by Eran
 
 Art and Music by Dangerbites and Haynster
+
+### Installation instructions
+
+<div class="alert alert-info">These installation instructions have been automatically generated based on Universal-Updater's installation scripts</div>
+<details class="alert alert-secondary"><summary>Install game (3dsx)</summary>
+<ol>
+<li>Create the folder <code>/3ds/BreakupSimulator/</code></li>
+<li>Download <code>BreakupSimulator3DS.zip</code></li>
+<li>Extract everything from the zip to <code>/3ds/BreakupSimulator/</code> on your SD card</li>
+</ol>
+</details>
+

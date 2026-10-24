@@ -20,6 +20,7 @@ image_length: 630
 layout: app
 license: apache-2.0
 license_name: Apache License 2.0
+llm_generation: 'no'
 qr:
   bcsds.nds: https://db.universal-team.net/assets/images/qr/bcsds-nds.png
 screenshots:
@@ -28,7 +29,7 @@ screenshots:
 - description: Title screen
   url: https://db.universal-team.net/assets/images/screenshots/better-call-saul-ds/title-screen.png
 source: https://github.com/WiIIiam278/BCSDS
-stars: 32
+stars: 34
 systems:
 - DS
 title: Better Call Saul DS

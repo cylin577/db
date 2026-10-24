@@ -3,6 +3,7 @@ author: sheepy
 avatar: https://avatars.githubusercontent.com/u/73724119?v=4
 categories:
 - app
+- media
 color: '#8a7585'
 color_bg: '#806c7b'
 created: '2025-07-30T12:35:13Z'
@@ -24,6 +25,7 @@ image_length: 32108
 layout: app
 license: mit
 license_name: MIT License
+llm_generation: unknown
 qr:
   pomegranate.cia: https://db.universal-team.net/assets/images/qr/pomegranate-cia.png
 screenshots:
@@ -32,7 +34,7 @@ screenshots:
 - description: Playing
   url: https://db.universal-team.net/assets/images/screenshots/pomegranate/playing.png
 source: https://github.com/sheepy0125/pomegranate
-stars: 34
+stars: 42
 systems:
 - 3DS
 title: Pomegranate
@@ -40,9 +42,7 @@ unique_ids:
 - '0xBEAAA'
 update_notes: '<ul dir="auto">
 
-  <li>Opus support (by <a class="user-mention notranslate" data-hovercard-type="user"
-  data-hovercard-url="/users/l1npengtul/hovercard" data-octo-click="hovercard-link-click"
-  data-octo-dimensions="link_type:self" href="https://github.com/l1npengtul">@l1npengtul</a>)</li>
+  <li>Opus support (by @l1npengtul)</li>
 
   <li>Plugin system and offline <a href="https://web.archive.org/web/20161207115744/http://www.audioscrobbler.net/wiki/Portable_Player_Logging"
   rel="nofollow">scrobbler.log</a> support</li>

@@ -19,16 +19,19 @@ github: hax0kartik/rehid
 image: https://avatars.githubusercontent.com/u/16360444?v=4&size=128
 image_length: 21350
 layout: app
+llm_generation: unknown
 qr:
   rehidhelper.cia: https://db.universal-team.net/assets/images/qr/rehidhelper-cia.png
 screenshots:
 - description: Helper
   url: https://db.universal-team.net/assets/images/screenshots/rehid/helper.png
 source: https://github.com/hax0kartik/rehid
-stars: 141
+stars: 155
 systems:
 - 3DS
 title: rehid
+unique_ids:
+- '0xDF10'
 update_notes: '<p dir="auto">This is the sixth public release of rehid.</p>
 
   <p dir="auto"><strong>E: A hotfix has been made which fixes Zl/ZR behaviour on n3ds.
@@ -158,3 +161,15 @@ Get devkitpro, ctrulib and makerom and then `make -j` to compile.
 Druivensap on my discord server for helping me test out.
 
 Luma3ds devs and contributors
+
+### Installation instructions
+
+<div class="alert alert-info">These installation instructions have been automatically generated based on Universal-Updater's installation scripts</div>
+<details class="alert alert-secondary"><summary>rehidhelper.cia</summary>
+<ol>
+<li>Download <code>rehidhelper.cia</code> to <code>/cias/rehidhelper.cia</code> on your SD card</li>
+<li>Insert your SD card back into your 3DS and turn it on</li>
+<li>Install and delete <code>/cias/rehidhelper.cia</code> using FBI or GodMode9</li>
+</ol>
+</details>
+

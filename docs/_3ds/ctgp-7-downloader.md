@@ -3,6 +3,7 @@ author: CTGP-7 Team
 avatar: https://avatars.githubusercontent.com/u/46403089?s=200&v=4
 categories:
 - game
+- plugin
 color: '#654547'
 color_bg: '#654547'
 created: '2015-01-01T00:00:00Z'
@@ -17,6 +18,10 @@ icon: https://db.universal-team.net/assets/images/icons/ctgp-7-downloader.png
 image: https://db.universal-team.net/assets/images/images/ctgp-7-downloader.png
 image_length: 45424
 layout: app
+llm_generation: 'no'
+preinstall_message: 'Note: Installing this will overwrite any existing install of
+
+  CTGP-7, only install if you do not already have CTGP-7.'
 qr:
   CTGP-7_Downloader.cia: https://db.universal-team.net/assets/images/qr/ctgp-7_downloader-cia.png
 screenshots:
@@ -26,9 +31,6 @@ screenshots:
   url: https://db.universal-team.net/assets/images/screenshots/ctgp-7-downloader/extra-features-menu.png
 - description: Title & cup selection
   url: https://db.universal-team.net/assets/images/screenshots/ctgp-7-downloader/title-&-cup-selection.png
-script_message: 'Note: Installing this will overwrite any existing install of
-
-  CTGP-7, only install if you do not already have CTGP-7.'
 stars: 0
 systems:
 - 3DS

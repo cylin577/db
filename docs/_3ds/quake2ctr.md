@@ -20,6 +20,12 @@ image_length: 6044
 layout: app
 license: gpl-2.0
 license_name: GNU General Public License v2.0
+llm_generation: 'no'
+preinstall_message: 'Note: You will need the "baseq2" folder
+
+  from the full release of the game in
+
+  "sdmc:/3ds/quake2" to play the game.'
 qr:
   Quake2CTR.cia: https://db.universal-team.net/assets/images/qr/quake2ctr-cia.png
 screenshots:
@@ -27,13 +33,8 @@ screenshots:
   url: https://db.universal-team.net/assets/images/screenshots/quake2ctr/gameplay-1.png
 - description: Gameplay 2
   url: https://db.universal-team.net/assets/images/screenshots/quake2ctr/gameplay-2.png
-script_message: 'Note: You will need the "baseq2" folder
-
-  from the full release of the game in
-
-  "sdmc:/3ds/quake2" to play the game.'
 source: https://github.com/masterfeizz/Quake2CTR
-stars: 55
+stars: 58
 systems:
 - 3DS
 title: Quake2CTR

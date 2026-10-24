@@ -24,6 +24,7 @@ image_length: 3609
 layout: app
 license: gpl-3.0
 license_name: GNU General Public License v3.0
+llm_generation: 'no'
 nightly:
   download_page: https://github.com/Universal-Team/Universal-Edit/releases/tag/git
   downloads:
@@ -48,7 +49,7 @@ nightly:
 qr:
   Universal-Edit.cia: https://db.universal-team.net/assets/images/qr/universal-edit-cia.png
 source: https://github.com/Universal-Team/Universal-Edit
-stars: 14
+stars: 15
 systems:
 - 3DS
 title: Universal-Edit

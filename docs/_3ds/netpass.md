@@ -1,6 +1,6 @@
 ---
 author: NetPass
-avatar: https://gitlab.com/uploads/-/system/project/avatar/56839786/icon.png
+avatar: https://gitlab.com//uploads/-/system/group/avatar/87104415/icon.png?v=1716030859
 categories:
 - utility
 color: '#87d6c8'
@@ -10,35 +10,36 @@ description: NetPass allows you to get StreetPasses over the internet
 download_page: https://gitlab.com/3ds-netpass/netpass/-/releases
 downloads:
   netpass.3dsx:
-    size: 7811848
+    size: 8218356
     size_str: 7 MiB
-    url: https://gitlab.com/3ds-netpass/netpass/-/raw/bafaff436f2148d7e2a1a5e3542617317fc10de6/netpass.3dsx?inline=false
+    url: https://gitlab.com/3ds-netpass/netpass/-/raw/34ea4f3b8634671119d1f03ddca36146fe4d0b15/netpass.3dsx
   netpass.cia:
-    size: 7889856
+    size: 8274880
     size_str: 7 MiB
-    url: https://gitlab.com/3ds-netpass/netpass/-/raw/bafaff436f2148d7e2a1a5e3542617317fc10de6/netpass.cia?inline=false
+    url: https://gitlab.com/3ds-netpass/netpass/-/raw/34ea4f3b8634671119d1f03ddca36146fe4d0b15/netpass.cia
 gitlab: 3ds-netpass/netpass
 icon: https://gitlab.com/3ds-netpass/netpass/-/raw/main/meta/icon.png
 image: https://gitlab.com/3ds-netpass/netpass/-/raw/main/meta/icon.png
 image_length: 2983
 layout: app
-license: gpl-3.0
+license: gpl-3.0+
 license_name: GNU General Public License v3.0 or later
+llm_generation: 'no'
 qr:
   netpass.cia: https://db.universal-team.net/assets/images/qr/netpass-cia.png
 source: https://gitlab.com/3ds-netpass/netpass
-stars: 72
+stars: 78
 systems:
 - 3DS
 title: NetPass
 unique_ids:
 - '0xF6574'
-update_notes: " - Fix error popup (Thanks @blaadeeee)\n - Add scam warning\n - Add\
-  \ important popup about backing up nid_pwd\n - Add time setter for if your system\
-  \ time is off"
-updated: '2026-04-18T14:14:25.315Z'
-version: v2.0.2
-version_title: v2.0.2
+update_notes: <ul data-sourcepos="1:2-3:26" dir="auto">&#x000A;<li data-sourcepos="1:2-1:23">Fix
+  Poke Transporter</li>&#x000A;<li data-sourcepos="2:2-2:42">Hide error 1 that some
+  are experiencing</li>&#x000A;<li data-sourcepos="3:2-3:26">Update Back Alley music</li>&#x000A;</ul>
+updated: '2026-08-27T10:15:45.000Z'
+version: v2.1.1
+version_title: v2.1.1
 website: https://netpass.cafe
 ---
 #NetPass: StreetPass in the modern world

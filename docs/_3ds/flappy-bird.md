@@ -24,6 +24,7 @@ image_length: 5916
 layout: app
 license: gpl-3.0
 license_name: GNU General Public License v3.0
+llm_generation: unknown
 qr:
   Flappy-Bird.cia: https://db.universal-team.net/assets/images/qr/flappy-bird-cia.png
 screenshots:
@@ -36,7 +37,7 @@ screenshots:
 - description: Title screen
   url: https://db.universal-team.net/assets/images/screenshots/flappy-bird/title-screen.png
 source: https://github.com/npid7/Flappy-Bird
-stars: 4
+stars: 5
 systems:
 - 3DS
 title: Flappy-Bird

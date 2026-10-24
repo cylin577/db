@@ -1,10 +1,10 @@
 ---
-author: Volkan Turkut
+author: MechanicalDragon / Volkan Turkut
 avatar: https://avatars.githubusercontent.com/u/52756666?v=4
 categories:
 - utility
-color: '#736050'
-color_bg: '#736050'
+color: '#646a92'
+color_bg: '#575d80'
 created: '2026-05-13T23:41:34Z'
 description: Generate and Install NDS Forwarders
 download_page: https://github.com/volkanturkut/NDSForwarder/releases
@@ -14,13 +14,15 @@ downloads:
     size_str: 1 MiB
     url: https://github.com/volkanturkut/ndsForwarder/releases/download/1.4.7/ndsForwarder.3dsx
 github: volkanturkut/NDSForwarder
-image: https://avatars.githubusercontent.com/u/52756666?v=4&size=128
-image_length: 22768
+icon: https://raw.githubusercontent.com/volkanturkut/ndsForwarder/refs/heads/master/icon.png
+image: https://raw.githubusercontent.com/volkanturkut/ndsForwarder/refs/heads/master/icon.png
+image_length: 1089
 layout: app
 license: gpl-3.0
 license_name: GNU General Public License v3.0
+llm_generation: unknown
 source: https://github.com/volkanturkut/ndsForwarder
-stars: 2
+stars: 6
 systems:
 - 3DS
 title: ndsForwarder
@@ -89,9 +91,22 @@ update_notes: '<p dir="auto">Requires full CFW via Rosalina (b9s+luma3ds)</p>
 updated: '2026-05-13T23:54:18Z'
 version: 1.4.7
 version_title: 1.4.7
+wiki: https://wiki.ds-homebrew.com/ds-index/forwarders?tab=3ds-sd-card/
 ---
 ### Installing
 1. Download the [3DS SD card forwarder pack](https://github.com/RocketRobz/NTR_Forwarder/releases/latest/download/DS.Game.Forwarder.pack.nds-bootstrap.7z)
 1. Extract the contents of the `for SD card root` folder to the root of your SD card
 
 When installing with Universal-Updater this is done automatically.
+
+### Installation instructions
+
+<div class="alert alert-info">These installation instructions have been automatically generated based on Universal-Updater's installation scripts</div>
+<details class="alert alert-secondary"><summary>ndsForwarder.3dsx</summary>
+<ol>
+<li>Download <code>ndsForwarder.3dsx</code> to <code>/3ds/ndsForwarder.3dsx</code> on your SD card</li>
+<li>Download <code>DS.Game.Forwarder.pack.nds-bootstrap.7z</code></li>
+<li>Extract the contents of <code>/for SD Card root/</code> from the 7z to the root of your SD card</li>
+</ol>
+</details>
+

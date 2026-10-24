@@ -11,17 +11,17 @@ description: ' A homebrew music player for Nintendo 3DS that streams YouTube aud
 download_page: https://github.com/imissuuuu/StreaMu/releases
 downloads:
   StreaMu-Server.zip:
-    size: 22791422
-    size_str: 21 MiB
-    url: https://github.com/imissuuuu/StreaMu/releases/download/v1.4.1/StreaMu-Server.zip
+    size: 23798235
+    size_str: 22 MiB
+    url: https://github.com/imissuuuu/StreaMu/releases/download/v1.5.1/StreaMu-Server.zip
   streamu.3dsx:
-    size: 1736352
+    size: 1875276
     size_str: 1 MiB
-    url: https://github.com/imissuuuu/StreaMu/releases/download/v1.4.1/streamu.3dsx
+    url: https://github.com/imissuuuu/StreaMu/releases/download/v1.5.1/streamu.3dsx
   streamu.cia:
-    size: 1356224
+    size: 1462720
     size_str: 1 MiB
-    url: https://github.com/imissuuuu/StreaMu/releases/download/v1.4.1/streamu.cia
+    url: https://github.com/imissuuuu/StreaMu/releases/download/v1.5.1/streamu.cia
 github: imissuuuu/StreaMu
 icon: https://raw.githubusercontent.com/imissuuuu/StreaMu/main/assets/icon_48.png
 image: https://raw.githubusercontent.com/imissuuuu/StreaMu/main/assets/banner_256.png
@@ -29,46 +29,85 @@ image_length: 3392
 layout: app
 license: mit
 license_name: MIT License
+llm_generation: unknown
 qr:
   streamu.cia: https://db.universal-team.net/assets/images/qr/streamu-cia.png
 source: https://github.com/imissuuuu/StreaMu
-stars: 5
+stars: 11
 systems:
 - 3DS
 title: StreaMu
 unique_ids:
 - '0xFF3D1'
-update_notes: '<h2 dir="auto">Summary</h2>
+update_notes: '<h1 dir="auto">StreaMu v1.5.1 Release Notes</h1>
+
+  <h2 dir="auto">Highlights</h2>
 
   <ul dir="auto">
 
-  <li>Added cancelable startup server connection flow.</li>
+  <li>Improved steady-state Opus playback behavior to reduce low-FPS feeling and refill
+  instability during playback.</li>
 
-  <li>Added Mac/Linux Python server startup script.</li>
+  <li>Reduced noisy hot-path observation overhead while keeping the playback pipeline
+  changes that were validated on hardware.</li>
 
-  <li>Added GitHub Actions 3DS artifact build workflow.</li>
-
-  <li>Added GitHub Actions packaging tool installation for CIA builds.</li>
+  <li>Tightened several playback and UI edge cases, including buffering state transitions,
+  startup connection checks, and QA Remove handling.</li>
 
   </ul>
 
-  <h2 dir="auto">Verification</h2>
+  <h2 dir="auto">Upgrade Notes</h2>
 
   <ul dir="auto">
 
-  <li>Local clean 3DS build passed.</li>
+  <li>Update both the 3DS app and the proxy server together.</li>
 
-  <li>GitHub Actions required check passed on PR <a class="issue-link js-issue-link"
-  data-error-text="Failed to load title" data-id="4460377293" data-permission-text="Title
-  is private" data-url="https://github.com/imissuuuu/StreaMu/issues/1" data-hovercard-type="pull_request"
-  data-hovercard-url="/imissuuuu/StreaMu/pull/1/hovercard" href="https://github.com/imissuuuu/StreaMu/pull/1">#1</a>.</li>
+  <li>Replace your existing <code class="notranslate">StreaMu-Server.zip</code> with
+  the version from this release.</li>
+
+  <li>Existing Opus Direct usage stays the same; this is a maintenance and smoothness
+  update rather than a feature reset.</li>
 
   </ul>
 
-  <p dir="auto">Android APK prototype changes are not included in this release.</p>'
-updated: '2026-05-16T15:39:44Z'
-version: v1.4.1
-version_title: StreaMu v1.4.1
+  <h2 dir="auto">Release Assets</h2>
+
+  <ul dir="auto">
+
+  <li><code class="notranslate">streamu.cia</code></li>
+
+  <li><code class="notranslate">streamu.3dsx</code></li>
+
+  <li><code class="notranslate">StreaMu-Server.zip</code>
+
+  <ul dir="auto">
+
+  <li>Includes <code class="notranslate">StreaMu-Server.exe</code>, <code class="notranslate">LICENSE</code>,
+  and <code class="notranslate">THIRD_PARTY_LICENSES.md</code>.</li>
+
+  </ul>
+
+  </li>
+
+  </ul>
+
+  <h2 dir="auto">Validation</h2>
+
+  <ul dir="auto">
+
+  <li>The Opus playback tuning changes were reviewed in TAKT review runs before release
+  preparation.</li>
+
+  <li>Device testing reported no regression and no meaningful playback artifacts after
+  the steady-state refill tuning adjustments.</li>
+
+  <li>GitHub release automation rebuilds the 3DS and server artifacts from the merged
+  <code class="notranslate">main</code> commit before publishing this release.</li>
+
+  </ul>'
+updated: '2026-06-01T15:08:42Z'
+version: v1.5.1
+version_title: StreaMu v1.5.1
 ---
 StreaMu is a homebrew music player for Nintendo 3DS that lets you search and stream YouTube
   audio directly on your device.

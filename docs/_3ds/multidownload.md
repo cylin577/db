@@ -24,10 +24,11 @@ image_length: 29351
 layout: app
 license: gpl-3.0
 license_name: GNU General Public License v3.0
+llm_generation: 'no'
 qr:
   Multidownload.cia: https://db.universal-team.net/assets/images/qr/multidownload-cia.png
 source: https://github.com/hax0kartik/Multidownload
-stars: 38
+stars: 39
 systems:
 - 3DS
 title: Multidownload

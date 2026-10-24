@@ -17,12 +17,13 @@ downloads:
     url: https://github.com/LumaTeam/Luma3DS/releases/download/v13.4/Luma3DSv13.4.zip
 github: LumaTeam/Luma3DS
 image: https://avatars.githubusercontent.com/u/65085206?v=4&size=128
-image_length: 7260
+image_length: 7217
 layout: app
 license: gpl-3.0
 license_name: GNU General Public License v3.0
+llm_generation: 'no'
 source: https://github.com/LumaTeam/Luma3DS
-stars: 6436
+stars: 6798
 systems:
 - 3DS
 title: Luma3DS
@@ -77,3 +78,14 @@ version: v13.4
 version_title: v13.4
 wiki: https://github.com/LumaTeam/Luma3DS/wiki
 ---
+### Installation instructions
+
+<div class="alert alert-info">These installation instructions have been automatically generated based on Universal-Updater's installation scripts</div>
+<details class="alert alert-secondary"><summary>boot.firm</summary>
+<ol>
+<li>Download <code>Luma3DSv13.4.zip</code></li>
+<li>Extract <code>/boot.firm</code> from the zip to <code>/boot.firm</code> on your SD card</li>
+<li>Extract <code>/config</code> from the zip to <code>/config</code> on your SD card</li>
+</ol>
+</details>
+

@@ -25,6 +25,11 @@ image_length: 12658
 layout: app
 license: mit
 license_name: MIT License
+llm_generation: unknown
+preinstall_message: 'You will need to have "Game Patching" and "Loading external FIRMs
+  and modules"
+
+  enabled in LumaCFW settings (hold select on boot)'
 qr:
   CtrRGBPAT2.cia: https://db.universal-team.net/assets/images/qr/ctrrgbpat2-cia.png
 screenshots:
@@ -38,12 +43,8 @@ screenshots:
   url: https://db.universal-team.net/assets/images/screenshots/ctrrgbpat2/pattern-modifier.png
 - description: Testing functionnality
   url: https://db.universal-team.net/assets/images/screenshots/ctrrgbpat2/testing-functionnality.png
-script_message: 'You will need to have "Game Patching" and "Loading external FIRMs
-  and modules"
-
-  enabled in LumaCFW settings (hold select on boot)'
 source: https://github.com/Golem642/CtrRGBPAT2
-stars: 13
+stars: 14
 systems:
 - 3DS
 title: CtrRGBPAT2

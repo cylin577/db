@@ -17,23 +17,16 @@ downloads:
     size: 501696
     size_str: 489 KiB
     url: https://github.com/lartodor/Nintendo-3DS-SpeedMaze/releases/download/V1.1.0/speedmaze.cia
-  speedmaze.unistore:
-    size: 775
-    size_str: 775 Bytes
-    url: https://github.com/lartodor/Nintendo-3DS-SpeedMaze/releases/download/V1.1.0/speedmaze.unistore
-  speedmaze.zip:
-    size: 753177
-    size_str: 735 KiB
-    url: https://github.com/lartodor/Nintendo-3DS-SpeedMaze/releases/download/V1.1.0/speedmaze.zip
 github: lartodor/Nintendo-3DS-SpeedMaze
 icon: https://raw.githubusercontent.com/lartodor/Nintendo-3DS-SpeedMaze/V1.1/icon.png
 image: https://raw.githubusercontent.com/lartodor/Nintendo-3DS-SpeedMaze/V1.1/banner.png
 image_length: 71395
 layout: app
+llm_generation: unknown
 qr:
   speedmaze.cia: https://db.universal-team.net/assets/images/qr/speedmaze-cia.png
 source: https://github.com/lartodor/Nintendo-3DS-SpeedMaze
-stars: 1
+stars: 2
 systems:
 - 3DS
 title: Nintendo-3DS-SpeedMaze

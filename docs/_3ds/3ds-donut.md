@@ -23,13 +23,14 @@ icon: https://raw.githubusercontent.com/Buggem/3ds-donut/refs/heads/main/meta/ic
 image: https://raw.githubusercontent.com/Buggem/3ds-donut/refs/heads/main/meta/banner.png
 image_length: 9095
 layout: app
+llm_generation: unknown
 qr:
   3ds-donut.cia: https://db.universal-team.net/assets/images/qr/3ds-donut-cia.png
 screenshots:
 - description: Donut
   url: https://db.universal-team.net/assets/images/screenshots/3ds-donut/donut.png
 source: https://github.com/Buggem/3ds-donut
-stars: 2
+stars: 1
 systems:
 - 3DS
 title: 3DS Donut

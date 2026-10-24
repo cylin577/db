@@ -24,6 +24,7 @@ image_length: 2102
 layout: app
 license: gpl-3.0
 license_name: GNU General Public License v3.0
+llm_generation: unknown
 nightly:
   download_page: https://github.com/lifehackerhansol/NDSForwarder-DSi/actions
   downloads:
@@ -33,7 +34,7 @@ qr:
   NDSForwarder.dsi: https://db.universal-team.net/assets/images/qr/ndsforwarder-dsi.png
   NDSForwarder.nds: https://db.universal-team.net/assets/images/qr/ndsforwarder-nds.png
 source: https://github.com/lifehackerhansol/NDSForwarder-DSi
-stars: 23
+stars: 24
 systems:
 - DS
 title: NDSForwarder-DSi

@@ -3,6 +3,7 @@ author: NPI-D7
 avatar: https://avatars.githubusercontent.com/u/71648010?v=4
 categories:
 - app
+- media
 color: '#a1a0c9'
 color_bg: '#666580'
 created: '2021-02-04T09:53:45Z'
@@ -24,6 +25,7 @@ image_length: 2829
 layout: app
 license: gpl-3.0
 license_name: GNU General Public License v3.0
+llm_generation: unknown
 qr:
   BCSTM-Player.cia: https://db.universal-team.net/assets/images/qr/bcstm-player-cia.png
 screenshots:
@@ -32,7 +34,7 @@ screenshots:
 - description: Main menu
   url: https://db.universal-team.net/assets/images/screenshots/bcstm-player/main-menu.png
 source: https://github.com/npid7/BCSTM-Player
-stars: 2
+stars: 4
 systems:
 - 3DS
 title: BCSTM-Player
